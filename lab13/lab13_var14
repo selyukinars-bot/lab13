@@ -1,0 +1,30 @@
+# Лабораторная работа №13. Вариант 14 (средний): проверка скобок
+# Структура данных: стек (list с append/pop), LIFO
+
+
+def check_brackets(text):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    for ch in text:
+        if ch in "([{":
+            stack.append(ch)
+        elif ch in pairs:
+            if not stack or stack.pop() != pairs[ch]:
+                return False
+    return not stack  # в конце стек должен быть пуст
+
+
+def run_tests():
+    assert check_brackets("{[()]}") is True           # обычный сценарий
+    assert check_brackets("") is True                 # пустая строка
+    assert check_brackets("(]") is False              # неверный тип скобки
+    assert check_brackets(")(") is False              # закрывающая первой
+    assert check_brackets("((") is False              # не все закрыты
+    assert check_brackets("a(b)c[d]") is True         # посторонние символы
+    print("Тесты пройдены")
+
+
+if __name__ == "__main__":
+    run_tests()
+    for s in ["()[]{}", "([)]", "((("]:
+        print(f"{s!r}:", "верно" if check_brackets(s) else "неверно")

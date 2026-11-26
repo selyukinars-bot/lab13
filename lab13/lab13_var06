@@ -1,0 +1,45 @@
+# Лабораторная работа №13. Вариант 6 (базовый): телефонная книга
+# Структура данных: dict имя -> телефон (быстрый поиск по уникальному ключу)
+
+
+class PhoneBook:
+    def __init__(self):
+        self.contacts = {}
+
+    def add(self, name, phone):
+        if name in self.contacts:      # защита от дубликата
+            return False
+        self.contacts[name] = phone
+        return True
+
+    def find(self, name):
+        return self.contacts.get(name)  # None, если контакта нет
+
+    def update(self, name, phone):
+        if name not in self.contacts:
+            return False
+        self.contacts[name] = phone
+        return True
+
+    def delete(self, name):
+        return self.contacts.pop(name, None) is not None
+
+
+def run_tests():
+    pb = PhoneBook()
+    assert pb.add("Алия", "111") is True              # обычный сценарий
+    assert pb.add("Алия", "222") is False             # дубликат
+    assert pb.find("Дамир") is None                   # отсутствующий контакт
+    assert pb.update("Алия", "333") and pb.find("Алия") == "333"
+    assert pb.update("Дамир", "1") is False           # изменение несуществующего
+    assert pb.delete("Алия") is True
+    assert pb.delete("Алия") is False                 # повторное удаление
+    assert PhoneBook().find("X") is None              # пустая книга
+    print("Тесты пройдены")
+
+
+if __name__ == "__main__":
+    run_tests()
+    pb = PhoneBook()
+    pb.add("Алия", "+7 700 111 22 33")
+    print("Телефон Алии:", pb.find("Алия"))
